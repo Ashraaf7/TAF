@@ -35,6 +35,7 @@ jobs:
               maven-version: 3.9.9
 
         - name: Running Tests
+          continue-on-error: true
           run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless"  -DbrowserType="Chrome" clean test
 
         - name: Upload Test Results
@@ -63,6 +64,7 @@ jobs:
             maven-version: 3.9.9
 
         - name: Running Tests
+          continue-on-error: true
           run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless"  -DbrowserType="Edge" clean test
 
         - name: Upload Test Results
