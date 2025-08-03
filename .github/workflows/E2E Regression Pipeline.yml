@@ -1,0 +1,73 @@
+name: E2E Regression
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron: '00 21 * * *'
+  workflow_dispatch:
+
+env:
+  TARGET: "%regex[.*Tests.*],com.automationexercices.tests.**.**,com.automationexercices.tests.**"
+
+jobs:
+    Chrome_Linux_Test:
+      runs-on: ubuntu-latest
+      permissions:
+        checks: write
+      steps:
+        - name: checkout Code
+          uses: actions/checkout@v4
+
+        - name: setup java
+          uses: actions/setup-java@v4
+          with:
+              distribution: 'zulu' # See 'Supported distributions' for available options
+              java-version: '21'
+
+        - name: setup maven
+          uses: stCarolas/setup-maven@v5
+          with:
+              maven-version: 3.9.9
+
+        - name: Running Tests
+          run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless"  -DbrowserType="Chrome" clean test
+
+        - name: Upload Test Results
+          uses: actions/upload-artifact@v4
+          with:
+              name: Chrome_Linux_Report
+              path: "test-output/reports/*.html"
+
+    Edge_Windows_Test:
+      runs-on: windows-latest
+      permissions:
+        checks: write
+      steps:
+        - name: checkout Code
+          uses: actions/checkout@v4
+
+        - name: setup java
+          uses: actions/setup-java@v4
+          with:
+            distribution: 'zulu' # See 'Supported distributions' for available options
+            java-version: '21'
+
+        - name: setup maven
+          uses: stCarolas/setup-maven@v5
+          with:
+            maven-version: 3.9.9
+
+        - name: Running Tests
+          run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless"  -DbrowserType="Edge" clean test
+
+        - name: Upload Test Results
+          uses: actions/upload-artifact@v4
+          with:
+            name: Edge_Windows_Report
+            path: "test-output/reports/*.html"
+
