@@ -3,6 +3,7 @@ package com.automationexercices.validations;
 import com.automationexercices.FileUtils;
 import com.automationexercices.utils.WaitManager;
 import com.automationexercices.utils.actions.ElementActions;
+import com.automationexercices.utils.logs.LogsManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -60,7 +61,19 @@ public abstract class BaseAssertion {
     //verify that file exists
     public void assertFileExists(String fileName, String message) {
         waitManager.fluentWait().until(
-                d -> FileUtils.isFileExists(fileName)
+
+                d ->
+                {
+                    try {
+                        FileUtils.isFileExists(fileName);
+                        return true;
+                    }
+                    catch (Exception e) {
+                        LogsManager.error("error" , e.getMessage());
+                        return false;
+                    }
+                }
+
         );
         assertTrue(FileUtils.isFileExists(fileName), message);
     }
