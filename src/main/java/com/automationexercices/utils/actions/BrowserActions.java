@@ -54,20 +54,24 @@ public class BrowserActions {
 
     //close extension tab
     public void closeExtensionTab() {
-        String currentWindowHandle = driver.getWindowHandle(); //0 1
-       waitManager.fluentWait().until(
-               d ->
-               {
-                   return d.getWindowHandles().size() > 1; //wait until extension tab is opened
-               }
-       );
-       for (String windowHandle : driver.getWindowHandles()) //extension tab is opened
-       {
-           if (!windowHandle.equals(currentWindowHandle))
-               driver.switchTo().window(windowHandle).close(); //close the extension tab
-       }
-       driver.switchTo().window(currentWindowHandle); //switch back to the main window
-       LogsManager.info("Extension tab closed");
+        if (PropertyReader.getProperty("extensions").equalsIgnoreCase("enabled"))
+        {
+            String currentWindowHandle = driver.getWindowHandle(); //0 1
+            waitManager.fluentWait().until(
+                    d ->
+                    {
+                        return d.getWindowHandles().size() > 1; //wait until extension tab is opened
+                    }
+            );
+            for (String windowHandle : driver.getWindowHandles()) //extension tab is opened
+            {
+                if (!windowHandle.equals(currentWindowHandle))
+                    driver.switchTo().window(windowHandle).close(); //close the extension tab
+            }
+            driver.switchTo().window(currentWindowHandle); //switch back to the main window
+            LogsManager.info("Extension tab closed");
+        }
+
     }
 
 

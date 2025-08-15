@@ -29,19 +29,19 @@ public class ProductsPage {
 
     //dynamic locators
     private By productName(String productName) {
-        return By.xpath("//div[@class='overlay-content'] /p[.='" + productName + "']");
+        return By.xpath("//div[@class='features_items'] //div[@class='overlay-content'] /p[.='" + productName + "']");
     }
 
     private By productPrice(String productName) {
-        return By.xpath("//div[@class='overlay-content'] /p[.='" + productName + "'] //preceding-sibling::h2");
+        return By.xpath("//div[@class='features_items'] //div[@class='overlay-content'] /p[.='" + productName + "'] //preceding-sibling::h2");
     }
 
     private By hoverOnProduct(String productName) {
-        return By.xpath("//div[@class='productinfo text-center'] /p[.='" + productName + "']");
+        return By.xpath("//div[@class='features_items'] //div[@class='productinfo text-center'] /p[.='" + productName + "']");
     }
 
     private By addToCartButton(String productName) {
-        return By.xpath("//div[@class='productinfo text-center'] /p[.='" + productName + "'] //following-sibling::a");
+        return By.xpath("//div[@class='features_items'] //div[@class='productinfo text-center'] /p[.='" + productName + "'] //following-sibling::a");
     }
 
     private By viewProduct(String productName) {
