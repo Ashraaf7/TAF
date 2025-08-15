@@ -41,7 +41,7 @@ public class ProductsPage {
     }
 
     private By addToCartButton(String productName) {
-        return By.xpath("//div[@class='features_items'] //div[@class='productinfo text-center'] /p[.='" + productName + "'] //following-sibling::a");
+        return By.xpath("//div[@class='features_items'] //div[@class='overlay-content'] /p[.='" + productName + "'] //following-sibling::a");
     }
 
     private By viewProduct(String productName) {
