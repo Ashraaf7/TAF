@@ -3,8 +3,18 @@ package com.automationexercices.validations;
 import com.automationexercices.FileUtils;
 import com.automationexercices.utils.WaitManager;
 import com.automationexercices.utils.actions.ElementActions;
+import com.automationexercices.utils.logs.LogsManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import static com.automationexercices.utils.report.AllureConstants.USER_DIR;
+import static java.nio.file.Paths.*;
 
 public abstract class BaseAssertion {
     protected WebDriver driver;
@@ -56,13 +66,32 @@ public abstract class BaseAssertion {
         String actualTitle = driver.getTitle();
         assertEquals(actualTitle, expectedTitle, "Title does not match. Expected: " + expectedTitle + ", Actual: " + actualTitle);
     }
-
-    //verify that file exists
-    public void assertFileExists(String fileName, String message) {
-        waitManager.fluentWait().until(
-
-                d -> FileUtils.isFileExists(fileName)
-        );
-        assertTrue(FileUtils.isFileExists(fileName), message);
+    public boolean doesFileExist(String fileName, int numberOfRetries) {
+        boolean doesFileExit = false;
+        int i = 0;
+        while (i < numberOfRetries) {
+            try {
+                String filePath = USER_DIR + "/src/test/resources/downloads/" ;
+                doesFileExit = (new File(filePath + fileName)).getAbsoluteFile().exists();
+            } catch (Exception rootCauseException) {
+                LogsManager.error( rootCauseException.getMessage());
+            }
+            if (!doesFileExit) {
+                try {
+                    Thread.sleep(500);
+                } catch (Exception rootCauseException) {
+                    LogsManager.error(rootCauseException.getMessage());
+                }
+            }
+            i++;
+        }
+        return doesFileExit;
     }
+
+    // Verify that file exists
+    public void assertFileExists(String fileName, String message) {
+        boolean exists = doesFileExist(fileName,3);
+        assertTrue(exists, message); // Use the result from wait instead of re-checking
+    }
+
 }
