@@ -66,32 +66,15 @@ public abstract class BaseAssertion {
         String actualTitle = driver.getTitle();
         assertEquals(actualTitle, expectedTitle, "Title does not match. Expected: " + expectedTitle + ", Actual: " + actualTitle);
     }
-    public boolean doesFileExist(String fileName, int numberOfRetries) {
-        boolean doesFileExit = false;
-        int i = 0;
-        while (i < numberOfRetries) {
-            try {
-                String filePath = USER_DIR + "/src/test/resources/downloads/" ;
-                doesFileExit = (new File(filePath + fileName)).getAbsoluteFile().exists();
-            } catch (Exception rootCauseException) {
-                LogsManager.error( rootCauseException.getMessage());
-            }
-            if (!doesFileExit) {
-                try {
-                    Thread.sleep(500);
-                } catch (Exception rootCauseException) {
-                    LogsManager.error(rootCauseException.getMessage());
-                }
-            }
-            i++;
-        }
-        return doesFileExit;
-    }
+
+
 
     // Verify that file exists
     public void assertFileExists(String fileName, String message) {
-        boolean exists = doesFileExist(fileName,3);
-        assertTrue(exists, message); // Use the result from wait instead of re-checking
+     waitManager.fluentWait().until(
+                driver1 -> FileUtils.isFileExists(fileName)
+        );
+        assertTrue(FileUtils.isFileExists(fileName), message);
     }
 
 }

@@ -27,14 +27,18 @@ public class ChromeFactory extends AbstractDriver {
         options.addArguments("--start-maximized");
         Map<String, Object> prefs = new HashMap<>();
         String userDir = System.getProperty("user.dir");
-        String downloadPath = System.getProperty("user.dir")
-                + File.separator + "src"
-                + File.separator + "test"
-                + File.separator + "resources"
-                + File.separator + "downloads";
+        String downloadPath = userDir +
+                File.separator +
+                "src"
+                + File.separator +
+                "test" +
+                File.separator +
+                "resources" +
+                File.separator +
+                "downloads";
         prefs.put("profile.default_content_settings.popups", 0);
         prefs.put("download.prompt_for_download", false);
-        prefs.put("download.default_directory",downloadPath);
+        prefs.put("download.default_directory", downloadPath);
         options.setExperimentalOption("prefs", prefs);
         options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
         options.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
@@ -43,11 +47,9 @@ public class ChromeFactory extends AbstractDriver {
         options.setAcceptInsecureCerts(true);
         if (PropertyReader.getProperty("extensions").equalsIgnoreCase("enabled"))
             options.addExtensions(haramBlurExtension);
-        switch (PropertyReader.getProperty("executionType"))
-        {
+        switch (PropertyReader.getProperty("executionType")) {
             case "LocalHeadless" -> options.addArguments("--headless=new");
-            case  "Remote" ->
-            {
+            case "Remote" -> {
                 options.addArguments("--disable-gpu");
                 options.addArguments("--disable-extensions");
                 options.addArguments("--headless=new");
@@ -60,23 +62,19 @@ public class ChromeFactory extends AbstractDriver {
     @Override
     public WebDriver createDriver() {
         if (PropertyReader.getProperty("executionType").equalsIgnoreCase("Local") ||
-                PropertyReader.getProperty("executionType").equalsIgnoreCase("LocalHeadless") )
-        {
+                PropertyReader.getProperty("executionType").equalsIgnoreCase("LocalHeadless")) {
             return new ChromeDriver(getOptions());
-        }
-        else if (PropertyReader.getProperty("executionType").equalsIgnoreCase("Remote")) {
+        } else if (PropertyReader.getProperty("executionType").equalsIgnoreCase("Remote")) {
             try {
                 return new RemoteWebDriver(
-                        new URI("http://"+ remoteHost+ ":" +remotePort + "/wd/hub").toURL(), getOptions()
+                        new URI("http://" + remoteHost + ":" + remotePort + "/wd/hub").toURL(), getOptions()
                 );
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 LogsManager.error("Error creating RemoteWebDriver: " + e.getMessage());
                 throw new RuntimeException("Failed to create RemoteWebDriver", e);
             }
 
-        }
-        else {
+        } else {
             LogsManager.error("Invalid execution type: " + PropertyReader.getProperty("executionType"));
             throw new IllegalArgumentException("Invalid execution type: " + PropertyReader.getProperty("executionType"));
         }
