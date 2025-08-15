@@ -76,4 +76,26 @@ public class FileUtils {
         return file.exists();
     }
 
+    //wait for file to be downloaded
+    public static boolean isFileExist(String fileName, int numberOfRetries) {
+        boolean isFileExist = false;
+        int i = 0;
+        while (i < numberOfRetries) {
+            try {
+                String filePath = USER_DIR + "/src/test/resources/downloads/" ;
+                isFileExist = (new File(filePath + fileName)).getAbsoluteFile().exists();
+            } catch (Exception e) {
+                LogsManager.error( e.getMessage());
+            }
+            if (!isFileExist) {
+                try {
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    LogsManager.error(e.getMessage());
+                }
+            }
+            i++;
+        }
+        return isFileExist;
+    }
 }
