@@ -61,11 +61,11 @@
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/Ashraaf7/automation-exercise-test.git
+   git clone https://github.com/Ashraaf7/TAF.git
    ```
 2. Navigate to the project directory:
    ```sh
-   cd automation-exercise-test
+   cd TAF
    ```
 3. Install dependencies:
   **If using Maven:**
