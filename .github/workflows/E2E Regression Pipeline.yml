@@ -39,7 +39,7 @@ jobs:
           run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless" -Dextensions="disabled" -DbrowserType="Chrome" clean test
 
         - name: Upload Test Results
-          uses: actions/upload-artifact@v4
+          uses: actions/upload-artifact@v5
           with:
               name: Chrome_Linux_Report
               path: "test-output/reports/*.html"
@@ -68,7 +68,7 @@ jobs:
           run: mvn -Dtest="${TARGET}" -DexecutionType="LocalHeadless" -Dextensions="enabled" -DbrowserType="Edge" clean test
 
         - name: Upload Test Results
-          uses: actions/upload-artifact@v4
+          uses: actions/upload-artifact@v5
           with:
             name: Edge_Windows_Report
             path: "test-output/reports/*.html"
